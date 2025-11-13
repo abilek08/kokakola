@@ -1,10 +1,18 @@
+import 'package:app/core/services/background_services.dart';
 import 'package:app/core/utils/notification.dart';
 import 'package:app/ui/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import "package:permission_handler/permission_handler.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService.init();
+
+  if (await Permission.notification.isDenied) {
+    await Permission.notification.request();
+  }
+
+  initializeBackgroundService();
   runApp(const MyApp());
 }
 

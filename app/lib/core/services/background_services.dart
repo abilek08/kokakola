@@ -28,7 +28,7 @@ void onStart(ServiceInstance service) async {
 
   ws.stream.listen((message) async {
     final data = jsonDecode(message);
-    final double value = (data['value'] as num).toDouble();
+    final double value = (data['humidity'] as num).toDouble();
 
     if (value < AppConstants.moistureThreshold) {
       await NotificationService.showNotification(
