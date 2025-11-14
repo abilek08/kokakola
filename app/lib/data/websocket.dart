@@ -5,6 +5,7 @@ import '../models/soil_data.dart';
 class WebSocketService {
   final String url;
   late WebSocketChannel _channel;
+  bool isCOnnected = false;
 
   WebSocketService(this.url) {
     _connect();
@@ -20,6 +21,11 @@ class WebSocketService {
 
   void _connect() {
     _channel = WebSocketChannel.connect(Uri.parse(url));
+    isCOnnected = true;
+  }
+
+  bool isConencted() {
+    return isCOnnected;
   }
 
   Stream<SoilData> channelStream() {
@@ -48,14 +54,17 @@ class WebSocketService {
 
   void reconnect() {
     _channel.sink.close();
+    isCOnnected = false;
     _connect();
   }
 
   void disconnect() {
     _channel.sink.close();
+    isCOnnected = false;
   }
 
   void dispose() {
     _channel.sink.close();
+    isCOnnected = false;
   }
 }

@@ -19,7 +19,7 @@
 
         </activity>
 
-        <service android:name="id.flutter.flutter_background_service.BackgroundService" android:exported="false" android:foregroundServiceType="dataSync" tools:replace="android:exported" />
+        <service android:name="id.flutter.flutter_background_service.BackgroundService" android:exported="false" android:foregroundServiceType="dataSync|connectedDevice|location" tools:replace="android:exported" />
 
         <meta-data android:name="flutterEmbedding" android:value="2" />
 

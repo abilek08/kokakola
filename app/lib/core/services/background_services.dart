@@ -11,7 +11,7 @@ Future<void> initializeBackgroundService() async {
     androidConfiguration: AndroidConfiguration(
       onStart: onStart,
       autoStart: true,
-      isForegroundMode: true,
+      isForegroundMode: false,
       notificationChannelId: 'soil_channel',
       initialNotificationTitle: 'Monitoring aktif',
       initialNotificationContent: 'Memantau kelembaban tanah...',
@@ -26,16 +26,24 @@ Future<void> initializeBackgroundService() async {
 void onStart(ServiceInstance service) async {
   final ws = WebSocketChannel.connect(Uri.parse(AppConstants.wsUrl));
 
+  int lastNotificationTime = 0;
+  int delayNotifications = 30 * 60 * 1000; 
+
   ws.stream.listen((message) async {
     final data = jsonDecode(message);
     final double value = (data['humidity'] as num).toDouble();
 
     if (value < AppConstants.moistureThreshold) {
+      if (DateTime.now().millisecondsSinceEpoch - lastNotificationTime <
+          delayNotifications) {
+        return;
+      }
       await NotificationService.showNotification(
         'Notification',
         title: 'Tanah mulai kering!',
         body: 'Kelembaban: ${value.toStringAsFixed(1)}%',
       );
+      lastNotificationTime = DateTime.now().millisecondsSinceEpoch;
     }
   });
 }
