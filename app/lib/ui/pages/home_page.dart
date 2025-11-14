@@ -82,6 +82,7 @@ class _HomePageState extends State<HomePage> {
           value: soilValue,
           showWarning: showWarning,
           onReconnect: wsService.reconnect,
+          wsService: wsService,
         ),
       ),
     );
